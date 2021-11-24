@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% load layout %}
+
+{% block content %}
+
+<h2>Ask for update to agent details</h2>
+
+<form method="POST">
+{% csrf_token %}
+
+<input type="submit" name="save" value="Save">
+
+<hr/>
+Subject: <input name="subject" style="width:600px" value="{{ usersettings.updateagencies_subject }}"> Immo de Blah
+
+<hr/>
+When there are no agents at all
+<br/><br/><textarea name="none" style="width:600px;height:400px">{{ usersettings.updateagencies_none }}</textarea>
+
+<hr/>
+When there is only one agent
+<br/><br/><textarea name="one" style="width:600px;height:400px">{{ usersettings.updateagencies_one }}</textarea>
+
+<hr/>
+When there several agents listed
+<br/><br/><textarea name="multiple" style="width:600px;height:400px">{{ usersettings.updateagencies_multiple }}</textarea>
+
+<hr/>
+Signature
+<br/><br/><textarea name="signature" style="width:600px;height:400px">{{ usersettings.updateagencies_signature }}</textarea>
+
+<hr><br/><br/><input type="submit" name="simulate" value="Simulate emails">&nbsp;&nbsp;<input type="submit" name="send" value="Send emails">
+</form>
+
+
+{% endblock %}

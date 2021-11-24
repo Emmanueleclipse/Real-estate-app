@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% load layout %}
+
+{% block endscripts %}{% javascripts "agence.js" %}{% endblock %}
+{% block extrahead %}{% css "agence.css" %}{% endblock %}
+
+{% block onready %}
+    agences.attach('#agences', 'single', { id: parseInt(window.location.hash.substring(1)) });  agences.display(); agents.display();
+{% endblock %}
+
+{% block content %}
+
+{% panel "agences" %}
+
+{% endblock %}

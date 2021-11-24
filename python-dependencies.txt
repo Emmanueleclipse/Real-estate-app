@@ -1,0 +1,12 @@
+django
+django-grappelli
+django-settings-export
+django-user-sessions
+django-widget-tweaks
+requests
+django-oauth-toolkit
+django-cors-middleware
+pyyaml
+ua-parser
+user-agents
+django-user-agents

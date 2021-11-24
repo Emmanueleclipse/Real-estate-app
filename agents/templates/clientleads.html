@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% load layout %}
+
+{% block endscripts %}{% javascripts "clientleads.js" %}{% endblock %}
+
+{% block onready %}
+    clientleads.attach('#clientleads', 'all', {}); clientleads.attachfilter('#filter', '#clientleads'); clientleads.display();
+{% endblock %}
+
+{% block content %}
+
+{% searchbar "filter" %}
+{% panel "clientleads" %}
+
+{% endblock %}

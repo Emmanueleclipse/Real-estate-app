@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% load layout %}
+
+{% block endscripts %}{% javascripts "groupchat.js" %}{% endblock %}
+{% block extrahead %}{% css "chat.css" %}{% endblock %}
+
+{% block onready %}
+
+    groupchat.attach('#groupchat', 'all', {}); groupchat.display(); refresh(groupchat,5);
+    groupchat.edit('#postgroupchat', { 'submit-inline': true });
+{% endblock %}
+
+{% block content %}
+<br/><br/>
+{% sectionrow %}{% sectionstart 1.0 %}
+
+    {% paneltitle "Chat avec agence..." %}
+    {% panel "postgroupchat" %}
+    {% panel "groupchat" %}
+{% sectionend %}{% sectionrowend %}
+
+{% endblock %}

@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% load layout %}
+
+{% block endscripts %}{% javascripts "suppliers.js" %}{% endblock %}
+
+{% block onready %}
+    suppliers.attach('#suppliers', 'all', {}); suppliers.attachfilter('#filter', '#suppliers'); suppliers.display();
+{% endblock %}
+
+{% block content %}
+
+{% searchbar "filter" %}
+<h4>
+	<div class="btn-group">&nbsp;
+		<a href="javascript:suppliers.modal('#modal', { 'title' : 'Nouveau' });"><button class="btn btn-default btn-sm" type="button" align="right"><i class="fa fa-plus"></i> Nouveau</button></a>
+	</div>
+</h4>
+{% panel "suppliers" %}
+
+{% endblock %}

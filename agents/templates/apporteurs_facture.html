@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% load layout %}
+
+{% block endscripts %}{% javascripts "apporteurfactures.js" %}{% endblock %}
+
+{% block onready %}
+    apporteurfactures.attach('#apporteurfactures', 'all', {}); apporteurfactures.display();
+{% endblock %}
+
+{% block content %}
+
+<h4><div class="btn-group"><a href="javascript:apporteurfactures.modal('#modal', { 'title' : 'Nouveau facture' });"><button class="btn btn-default btn-sm" type="button" align="right"><i class="fa fa-plus"></i> Nouveau</button></a></div></h4>
+{% panel "apporteurfactures" %}
+
+{% endblock %}

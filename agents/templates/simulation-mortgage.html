@@ -1,0 +1,193 @@
+{% extends "base.html" %}
+{% load layout %}
+
+
+{% block content %}
+<p>
+    {% sectionstart 0.5 %}
+        <form class="custom">
+
+             <div class="cardfull">
+                    <div class="form-group">
+                        <legend>Price</legend>
+                        <div class="row">
+                            <div class="col-md-6">The advertised price of the property is
+                            </div>
+                            <div class="col-md-5">
+                                <div class="input-group">
+                                    <input type="text" class="form-control" placeholder="Price"  name="price" id="price" size="9" maxlength="9">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+            </div>
+
+
+             <div class="cardfull">
+                    <div class="form-group">
+                        <legend>Mortgage</legend>
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="input-group">
+                                    <input type="text" class="form-control" name="mortgage_percent" id="mortgage_percent" size="3" maxlength="3">
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                mortgage of
+                            </div>
+                            <div class="col-md-5">
+                                <div class="input-group">
+                                    <input type="text" class="form-control" placeholder="Loan"  name="mortgage_amount" id="mortgage_amount" maxlength="9">
+                                </div>
+                            </div>
+                        </div>
+                        <br/>
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="input-group">
+                                    <input type="text" size="5" maxlength="5" class="form-control" name="interest_rate" id="interest_rate">
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                interest to be repaid over
+                            </div>
+                            <div class="col-md-5">
+                                <div class="input-group">
+                                    <input type="text" class="form-control" placeholder="Years"  name="repayment_years" id="repayment_years" size="4" maxlength="4">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+            </div>
+
+
+
+             <div class="cardfull">
+                    <div class="form-group">
+                        <legend>Income</legend>
+                        <div class="row">
+                            <div class="col-md-6">Your net monthly income is at least
+                            </div>
+                            <div class="col-md-5">
+                                <div class="input-group">
+                                    <input type="text" class="form-control" placeholder="Income"  name="income" id="income" maxlength="9">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+            </div>
+
+</form>
+
+
+    {% sectionnext 0.5 %}
+
+            <div class="cardfull">
+                <legend>What you need to pay</legend>
+                <div class="row">
+                    <div class="col-md-8">Down-payment cash needed</div>
+                    <div class="col-md-4"><span id="summary_cash">&#8230;</span></div>
+                </div>        
+                <div class="row">
+                    <div class="col-md-8">Monthly repayment</div>
+                    <div class="col-md-4"><span id="summary_repayments">&#8230;</span></div>
+                </div>        
+            </div>
+
+            <div class="cardfull">
+                <legend>Executive summary</legend>
+                <div class="row">
+                    <div class="col-md-8">The advertised price of the property is</div>
+                    <div class="col-md-4"><span id="summary_price">&#8230;</span></div>
+                    <div class="col-md-12">&nbsp;</div>
+                    <div class="col-md-8">Notaire fees will be</div>
+                    <div class="col-md-4"><span id="cost_notaire">&#8230;</span></div>
+                    <div class="col-md-8">Loan costs of the mortgage will be</div>
+                    <div class="col-md-4"><span id="cost_loan">&#8230;</span></div>
+                    <div class="col-md-8">You will pay bank in interest</div>
+                    <div class="col-md-4"><span id="summary_interest">&#8230;</span></div>
+                    <div class="col-md-12">&nbsp;</div>
+                    <div class="col-md-8">The total buying cost will be</div>
+                    <div class="col-md-4"><span id="summary_total">&#8230;</span></div>
+                </div>
+            </div>
+
+    {% sectionend %}
+
+{% endblock %}
+
+{% block endscripts %}{% javascripts "mortgagesimulator.js" %}{% endblock %}
+
+{% block onready %}
+    
+    $("input[name='price']").TouchSpin({
+        mousewheel: true,
+        min: 50000,
+        max: 10000000,
+        step: 1000,
+        decimals: 0,
+        boostat: 50,
+        maxboostedstep: 10000,
+        postfix: '&euro;'
+    }).change(mortgage_change_price);
+
+
+    $("input[name='mortgage_percent']").TouchSpin({
+        mousewheel: true,
+        min: 0,
+        max: 110,
+        step: 1,
+        decimals: 0,
+        boostat: 5,
+        maxboostedstep: 10,
+        postfix: '%'
+    }).change(mortgage_change_percent);
+
+    $("input[name='mortgage_amount']").TouchSpin({
+        mousewheel: true,
+        min: 0,
+        max: 10000000,
+        step: 1000,
+        decimals: 0,
+        boostat: 5,
+        maxboostedstep: 10000,
+        postfix: '&euro;'
+    }).change(mortgage_change_amount);
+
+
+    $("input[name='interest_rate']").TouchSpin({
+        mousewheel: true,
+        min: 1,
+        max: 5,
+        step: 0.01,
+        decimals: 2,
+        boostat: 0.05,
+        maxboostedstep: 0.1,
+        postfix: '%'
+    }).change(mortgage_change_rate);
+
+    $("input[name='repayment_years']").TouchSpin({
+        mousewheel: true,
+        min: 5,
+        max: 40,
+        step: 1,
+        decimals: 0,
+        boostat: 5,
+        maxboostedstep: 10,
+        postfix: 'years'
+    }).change(mortgage_change_years);
+
+    $("input[name='income']").TouchSpin({
+        mousewheel: true,
+        min: 500,
+        max: 300000,
+        step: 100,
+        decimals: 0,
+        boostat: 1000,
+        maxboostedstep: 10000,
+        postfix: '&euro;'
+    }).change(mortgage_change_income);
+
+    init_costs();
+
+{% endblock %}

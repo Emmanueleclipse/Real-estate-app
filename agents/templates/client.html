@@ -1,0 +1,104 @@
+{% extends "base.html" %}
+{% load layout %}
+
+{% block endscripts %}{% javascripts "client.js" %}{% endblock %}
+{% block extrahead %}{% css "client.css" %}{% endblock %}
+
+{% block onready %}
+    $('.tagsinput').tagEditor();
+
+    var clientid = get_clientid();
+    if (clientid)
+    {
+      var setform = { client_id : clientid, for_client : clientid };
+      clients.attach('#clientstatus', 'clientstatus', { filter : {'id' : clientid } } ); clients.display(); clients.hidden = setform;
+      clientcontacts.attach('#clientcontacts', 'single', { filter : {'client_id' : clientid } } ); clientcontacts.display(); clientcontacts.hidden = setform;
+      buyers.attach('#searches', 'single', { filter : {'client_id' : clientid } } ); buyers.display(); buyers.hidden = setform;
+      sellers.attach('#sales', 'single', { filter : {'client_id' : clientid } } ); sellers.display(); sellers.hidden = setform;
+      clientactivities.attach('#clientactivities', 'single', { filter : {'client_id' : clientid } } ); clientactivities.display(); clientactivities.hidden = setform;
+      todo.attach('#todo', 'single', { filter : {'for_client' : clientid } } ); todo.display(); todo.hidden = setform;
+    }
+    else alert("Missing client id");
+{% endblock %}
+
+{% block content %}
+<!-- 
+<div>
+            <ul class="tab-bar grey-tab">
+                <li class="active">
+                    <a href="#overview" data-toggle="tab">
+                        <span class="block text-center">
+                            <i class="fa fa-home fa-2x"></i> 
+                        </span>
+                        Overview
+                    </a>
+                </li>
+                <li>
+                    <a href="#message" data-toggle="tab">
+                        <span class="block text-center">
+                            <i class="fa fa-envelope fa-2x"></i> 
+                        </span> 
+                        Messages
+                    </a>
+                </li>
+                <li>
+                    <a href="#edit" data-toggle="tab">
+                        <span class="block text-center">
+                            <i class="fa fa-edit fa-2x"></i> 
+                        </span>
+                        Fiches
+                    </a>
+                </li>
+            </ul>
+ -->
+
+<br/><br/>
+{% sectionrow %}{% sectionstart 0.5 %}
+
+  <div class="panel panel-primary">
+    <div class="panel-heading" id="clientdetails-header"><span id="clientstatus">Contact</span>
+      <div class="btn-group pull-right">
+        <button class="btn btn-primary btn-xs dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          <span class="caret"></span>
+          <span class="sr-only">Toggle Dropdown</span>
+        </button>
+        <ul class="dropdown-menu">
+          <li><a href="javascript:buyers.modal('#modal', { 'title' : 'Nouveau recherche' });">Recherche</a></li>
+          <li><a href="javascript:sellers.modal('#modal', { 'title' : 'Nouveau vente' });">Vente</a></li>
+          <li><hr/></li>
+          <li><a href="javascript:clientcontacts.modal('#modal', { title : 'Nouveau contact', });">Nouveau contact</a></li>
+          <li><a href="javascript:clients.modal_delete('#modal', get_clientid());">Supprimer</a></li>
+        </ul>
+      </div>
+    </div>
+  {% panel "clientcontacts" %}
+  </div>
+
+  {% panel "searches" %}
+  {% panel "sales" %}
+
+{% sectionnext 0.33 %}
+
+  <div class="panel panel-primary">
+    <div class="panel-heading" id="clientdetails-header">A faire...
+      <div class="btn-group pull-right">
+        <a href="javascript:todo.modal('#modal', { 'title' : 'Nouveau tache' });"><button class="btn btn-default btn-sm" type="button"><i class="fa fa-plus"></i> Nouveau</button></a>
+      </div>
+    </div>
+  {% panel "todo" %}
+  </div>
+
+
+
+  <div class="panel panel-primary">
+    <div class="panel-heading" id="clientdetails-header">Activities
+      <div class="btn-group pull-right">
+        <a href="javascript:clientactivities.modal('#modal', { 'title' : 'Nouveau commentaire' } );"><button class="btn btn-default btn-sm" type="button"><i class="fa fa-plus"></i> Nouveau</button></a>
+      </div>
+    </div>
+  {% panel "clientactivities" %}
+  </div>
+
+{% sectionend %}{% sectionrowend %}
+
+{% endblock %}

@@ -1,0 +1,364 @@
+{% load layout %}
+{% block head %}
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+    <meta charset="utf-8">
+    <title>bienFacile</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    {% if request.user_agent.is_mobile %}
+        {% css "base-mobile.css" %}
+    {% else %}
+        {% css "base.css" %}
+    {% endif %}
+
+<script> var isadmin = ('{{user.is_admin}}' == 'True'?true:false), staticimageurl = '{% staticimageurl %}'; </script>
+{% block extrahead %}
+{% endblock %}{# /extrahead #}
+
+  </head>
+<body class="overflow-hidden">
+{% csrf_token %}
+
+{% endblock %}{# /head #}
+{% block main %}
+<div id="wrapper">
+{% block topnavigation %}
+        <div id="top-nav" class="fixed skin-1">
+            <a href="/" class="brand"><span>bien</span><span class="text-toggle">Facile</span></a><!-- /brand -->                 
+            <button type="button" class="navbar-toggle pull-left" id="sidebarToggle">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <button type="button" class="navbar-toggle pull-left hide-menu" id="menuToggle">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+
+    {% if not request.user_agent.is_mobile %}
+    <form class="navbar-form navbar-left">
+        <ul class="dropdown form-group">
+          <input data-toggle="dropdown" type="text" id="globalsearchfilter" class="form-control" placeholder="Recherche...">
+                      <ul class="dropdown-menu">
+                        <li class="dropdown-header">Clients</li>
+                        <li id="globalsearchclients">...</li>
+                        <li role="separator" class="divider"></li>
+
+                        <li class="dropdown-header">Confreres</li>
+                        <li id="globalsearchagents">...</li>
+                        <li role="separator" class="divider"></li>
+
+                        <li class="dropdown-header">Agences</li>
+                        <li id="globalsearchagences">...</li>
+                      </ul>
+        </ul>
+      </form>
+    {% endif %}
+
+            <ul class="nav-notification clearfix">
+
+                <li class="dropdown">
+                    <a class="dropdown-toggle" data-toggle="dropdown" href="#"> + <i class="fa fa-pencil fa-lg"></i></a>
+                      <ul class="dropdown-menu">
+                        <li><a href="javascript:addclientlead.modal('#modal', {  title : 'Client' });">Client</a></li>
+                        <li><a href="javascript:todo.modal('#modal', { 'title' : 'Nouveau tache' });">Tache</a></li>
+                      </ul>
+                </li>
+                <li class="profile dropdown">
+                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                        <strong>{{user}}</strong>
+                        <span><i class="fa fa-chevron-down"></i></span>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li>
+                            <a class="clearfix" href="/profile/">
+                                <img src="{{user.thumbnail}}" alt="{{user}}">
+                                <div class="detail">
+                                    <strong>{{user}}</strong>
+                                    <p class="grey">{{ user.email }}</p> 
+                                </div>
+                            </a>
+                        </li>
+                        <li><a tabindex="-1" href="/profile/" class="main-link"><i class="fa fa-edit fa-lg"></i> Change préférences</a></li>
+                        <li class="divider"></li>
+                        <li><a tabindex="-1" class="main-link logoutConfirm_open" href="#logoutConfirm"><i class="fa fa-lock fa-lg"></i> Log out</a></li>
+                    </ul>
+                </li>
+
+            </ul>
+        </div><!-- /top-nav-->
+
+{% endblock %}{# /topnavigation #}
+  
+{% block sidebar %}
+        <aside class="fixed skin-1">
+            <div class="sidebar-inner scrollable-sidebar">
+                <div class="size-toggle">
+                    <a class="btn btn-sm" id="sizeToggle">
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </a>
+
+                </div><!-- /size-toggle -->
+    {% if request.user_agent.is_mobile %}
+    <form class="navbar-form navbar-left">
+        <ul class="dropdown form-group">
+          <input data-toggle="dropdown" type="text" id="globalsearchfilter" class="form-control" placeholder="Recherche...">
+                      <ul class="dropdown-menu">
+                        <li class="dropdown-header">Clients</li>
+                        <li id="globalsearchclients">...</li>
+                        <li role="separator" class="divider"></li>
+
+                        <li class="dropdown-header">Confreres</li>
+                        <li id="globalsearchagents">...</li>
+                        <li role="separator" class="divider"></li>
+
+                        <li class="dropdown-header">Agences</li>
+                        <li id="globalsearchagences">...</li>
+                      </ul>
+        </ul>
+      </form>
+    {% endif %}
+
+                <div class="user-block clearfix">
+                    <img src="{{user.thumbnail}}" alt="{{user}}">
+                    <div class="detail">
+                        <strong>{{user}}</strong>
+                        <ul class="list-inline">
+                            <li><a href="/profile/">Préférences</a></li>
+                        </ul>
+                    </div>
+                </div><!-- /user-block -->
+
+                <div class="main-menu">
+                    <ul>
+                        <li class="openable open">
+                            <a href="#">
+                                <span class="menu-icon">
+                                    <i class="fa fa-comment-o fa-lg"></i>
+                                </span>
+                                <span class="text">
+                                    Chat <div id="unreadchattotal"></div>
+                                </span>
+                            </a>
+                            <ul id="unreadchat" class="submenu">
+                                <li>Loading...</li>
+                            </ul>
+                        </li>
+                        <li class="openable open">
+                            <a href="#">
+                                <span class="menu-icon">
+                                    <i class="fa fa-user fa-lg"></i>
+                                </span>
+                                <span class="text">
+                                    Clients
+                                </span>
+                            </a>
+                            <ul class="submenu">
+                                <li><a href="/acheteurs/"><span class="submenu-label">Acheteurs</span></a></li>
+                                <li><a href="/vendeurs/"><span class="submenu-label">Vendeurs</span></a></li>
+                                <li id="addclientlead">...</li>
+                                <li><a href="/clients/"><span class="submenu-label">Contactes</span></a></li>
+                            </ul>
+                        </li>
+                        <li class="openable open">
+                            <a href="#">
+                                <span class="menu-icon">
+                                    <i class="fa fa-group fa-lg"></i>
+                                </span>
+                                <span class="text">
+                                    Confr&egrave;res
+                                </span>
+                            </a>
+                            <ul class="submenu">
+                                <li><a href="/agents/"><span class="submenu-label">Confr&egrave;res</span></a></li>
+                                <li><a href="/agences/"><span class="submenu-label">Liste Agences</span></a></li>
+                                <li><a href="/monagence/#{{ user.agency_id }}"><span class="submenu-label">Mon agence</span></a></li>
+                            </ul>
+                        </li>
+                        <li class="openable open">
+                            <a href="#">
+                                <span class="menu-icon">
+                                    <i class="fa fa-home fa-lg"></i>
+                                </span>
+                                <span class="text">
+                                    Annonces
+                                </span>
+                            </a>
+                            <ul class="submenu">
+                                <li><a href="/annonces/2/"><span class="submenu-label">Depuis hier</span></a></li>
+                                <li><a href="/annonces/7/"><span class="submenu-label">Une semaine</span></a></li>
+                                <li><a href="/annonces/30/"><span class="submenu-label">Une mois</span></a></li>
+                            </ul>
+                        </li>
+                        <li class="openable open">
+                            <a href="#">
+                                <span class="menu-icon">
+                                    <i class="fa fa-flask fa-lg"></i>
+                                </span>
+                                <span class="text">
+                                    Outils
+                                </span>
+                            </a>
+                            <ul class="submenu">
+                                <li><a href="/simulation-credit/"><span class="submenu-label">Simulation credit</span></a></li>
+                                <!-- 
+                                <li><a href="/simulation-plusvalue/"><span class="submenu-label">Simulation plus value</span></a></li>
+                                <li><a href="/simulation-saisonniere/"><span class="submenu-label">Simulation saisonnière</span></a></li>
+                                -->
+                            </ul>
+                        </li>
+                        <li class="openable open">
+                            <a href="#">
+                                <span class="menu-icon">
+                                    <i class="fa fa-euro fa-lg"></i>
+                                </span>
+                                <span class="text">
+                                    Factures
+                                </span>
+                            </a>
+                            <ul class="submenu">
+                                {% if user.is_admin %}<li><a href="/sommaire_finance/"><span class="submenu-label">Sommaire</span></a></li>{% endif %}
+                                <li><a href="/suppliers_facture/"><span class="submenu-label">Factures</span></a></li>
+                                <li><a href="/facture_notaire/"><span class="submenu-label">Pour Notaire</span></a></li>
+                                <li><a href="/facture_agent/"><span class="submenu-label">Les miens</span></a></li>
+                                <li><a href="/facture_apporteur/"><span class="submenu-label">Apporteurs</span></a></li>
+                                <li><a href="/banque/"><span class="submenu-label">Banque</span></a></li>
+                                <!-- 
+                                <li><a href="/simulation-plusvalue/"><span class="submenu-label">Simulation plus value</span></a></li>
+                                <li><a href="/simulation-saisonniere/"><span class="submenu-label">Simulation saisonnière</span></a></li>
+                                -->
+                            </ul>
+                        </li>
+                        {% if user.is_admin %}
+                        <li class="openable open">
+                            <a href="#">
+                                <span class="menu-icon">
+                                    <i class="fa fa-cog fa-lg"></i>
+                                </span>
+                                <span class="text">
+                                    Admin
+                                </span>
+                            </a>
+                            <ul class="submenu">
+                                <li><a href="/clientleads/"><span class="submenu-label">Client leads</span></a></li>
+                                <li><a href="/updateagencies/"><span class="submenu-label">Update agencies</span></a></li>
+                                <li><a href="/csv_clientleads/"><span class="submenu-label">Contacts CSV (en)</span></a></li>
+                            </ul>
+                        </li>
+                        {% endif %}
+<!-- 
+                        <li>
+                            <a href="/help/">
+                                <span class="menu-icon">
+                                    <i class="fa fa-info-circle fa-lg"></i> 
+                                </span>
+                                <span class="text">
+                                    Aide
+                                </span>
+                                <span class="menu-hover"></span>
+                            </a>
+                        </li>
+ -->
+                    </ul>
+                    <div class="alert alert-info">
+{% if user.is_admin %}
+                        <a href="https://staging.bienfacile.com/">Staging server</a>
+{% else %}
+                        Bêta privé, réservé aux membres
+{% endif %}
+                    </div>
+
+                </div><!-- /main-menu -->
+            </div><!-- /sidebar-inner -->
+        </aside>
+
+{% endblock %}{# /topnavigation #}
+<div id="main-container">
+<div id="pagetop"></div>
+
+{% block content %}
+bienFacile holding page
+{% endblock %}{# /content #}
+</div>
+{% block footer %}
+
+{% endblock %}{# /footer #}
+</div>
+
+<div class="modal fade" id="modal" tabindex="-1" role="dialog" aria-labelledby="modal">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">...
+    </div>
+  </div>
+</div>
+
+
+    <!-- Logout confirmation -->
+    <div class="custom-popup width-100" id="logoutConfirm">
+        <div class="padding-md">
+            <h4 class="m-top-none"> Do you want to logout?</h4>
+        </div>
+
+        <div class="text-center">
+            <a class="btn btn-success m-right-sm" href="/accounts/logout/">Logout</a>
+            <a class="btn btn-danger logoutConfirm_close">Cancel</a>
+        </div>
+    </div>
+    
+
+    <!-- Placed at the end of the document so the pages load faster -->
+    {% if request.user_agent.is_mobile %}
+        {% javascripts "base-mobile.js" %}
+    {% else %}
+        {% javascripts "base.js" %}
+    {% endif %}
+    {% block endscripts %}
+    {% endblock %}
+
+    <script type="text/javascript">
+
+    {% if settings.DEBUG %}DEBUGPAGE = true;{% else %}DEBUGPAGE = false;{% endif %}
+
+    $(document).ready(function() {
+        window.csrf = '{{ csrf_token }}'; // required to pass through to all forms on the page
+
+        {% if request.user_agent.is_mobile %}
+        window.mySwiper = new Swiper ('.swiper-container', { effect: 'flip', loop: false });
+        {% else %}
+//        var mySwiper = new Swiper ('.swiper-container', { effect: 'flip', loop: false });
+        {% endif %}
+
+        unreadchat.attach('#unreadchat', 'all', {}); unreadchat.attach('#unreadchattotal', 'totals', {}); unreadchat.csrf = csrf; unreadchat.display(); unreadchat.refresh(10);
+        addclientlead.attach('#addclientlead', 'menu', {}); addclientlead.display(); addclientlead.csrf = csrf;
+
+        // ensure permission is set for the site to send notifications
+        if(window.Notification && Notification.permission!=="granted")
+        {
+            Notification.requestPermission(function(status)
+            {
+                if(Notification.permission!==status)
+                {
+                    Notification.permission=status;
+                }
+            })
+        }
+
+       {% block onready %}
+       {% endblock %}
+
+        clients.attach('#globalsearchclients', 'globalsearch', { perpage: 5 }); clients.attachmenufilter('#globalsearchfilter', '#globalsearchclients');
+        agents.attach('#globalsearchagents', 'globalsearch', { perpage: 5 }); agents.attachmenufilter('#globalsearchfilter', '#globalsearchagents');
+        agences.attach('#globalsearchagences', 'globalsearch', { perpage: 5 }); agences.attachmenufilter('#globalsearchfilter', '#globalsearchagences');
+
+    });</script>
+
+
+  </body>
+</html>
+{% endblock %}{# /main #}

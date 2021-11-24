@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% load layout %}
+
+{% block endscripts %}{% javascripts "suppliers.js" %}{% endblock %}
+
+{% block onready %}
+    suppliers_facture.attach('#suppliers_facture', 'all', {}); suppliers_facture.attachfilter('#filter', '#suppliers_facture'); suppliers_facture.display();
+{% endblock %}
+
+{% block content %}
+
+{% searchbar "filter" %}
+<h4>
+	<div class="btn-group">&nbsp;
+		<a href="javascript:suppliers_facture.modal('#modal', { 'title' : 'Nouveau' });"><button class="btn btn-default btn-sm" type="button" align="right"><i class="fa fa-plus"></i> Facture</button></a>
+		<a href="/suppliers/"><button class="btn btn-default btn-sm" type="button" align="right"><i class="fa fa-plus"></i> Fournisseur</button></a>
+
+	</div>
+</h4>
+{% panel "suppliers_facture" %}
+
+{% endblock %}

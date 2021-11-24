@@ -1,0 +1,75 @@
+{% load layout %}
+{% load widget_tweaks %}
+
+{% block content %}
+<head>
+    <meta charset="utf-8">
+    <title>Login</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    {% if request.user_agent.is_mobile %}
+        {% css "base-mobile.css" %}
+    {% else %}
+        {% css "base.css" %}
+    {% endif %}
+  </head>
+
+  <body>
+	<div class="login-wrapper">
+		<div class="text-center">
+			<h2 class="fadeInUp animation-delay8" style="font-weight:bold">
+				<span class="text-success">bien</span> <span style="color:#ccc; text-shadow:0 1px #fff">Facile</span>
+			</h2>
+		</div>
+		<div class="login-widget animation-delay1">	
+			<div class="panel panel-default">
+				<div class="panel-heading clearfix">
+					<div class="pull-left">
+						<i class="fa fa-lock fa-lg"></i> Login
+					</div>
+
+					<div class="pull-right">
+						<span style="font-size:11px;">Agent immobilier?</span>
+						<a class="btn btn-default btn-xs login-link" href="mailto:info@bienfacile.com" style="margin-top:-2px;"><i class="fa fa-plus-circle"></i> S'inscrivez</a>
+					</div>
+				</div>
+				<div class="panel-body">
+<form method="post" action="{% url 'login' %}" class="form-login">
+{% csrf_token %}
+<input type="hidden" name="next" value="{% if next %}{{ next }}{% else %}/{% endif %}" />
+						<div class="form-group">
+							<label>Votre Email</label>{{ form.username|attr:"placeholder:Email ici"|add_class:"form-control input-sm bounceIn animation-delay2" }}
+						</div>
+						<div class="form-group">
+							<label>Votre mot de passe</label>{{ form.password|attr:"placeholder:Mot de passe ici"|add_class:"form-control input-sm bounceIn animation-delay4" }}
+						</div>
+		
+						<div class="seperator"></div>
+						<div class="form-group">
+{% if form.errors %}
+<p>Nom d'utilisateur et mot de passe composé n'est pas valide.</p>
+{% endif %}
+							<a href="mailto:info@bienfacile.com">Probleme? Contactez-nous!</a>
+						</div>
+
+						<hr/>
+						<input type="submit" class="btn btn-success btn-sm bounceIn animation-delay5 pull-right" value="Entrer" />
+					</form>
+				</div>
+			</div><!-- /panel -->
+		</div><!-- /login-widget -->
+	</div><!-- /login-wrapper -->
+
+    <!-- Le javascript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    {% if request.user_agent.is_mobile %}
+        {% javascripts "base-mobile.js" %}
+    {% else %}
+        {% javascripts "base.js" %}
+    {% endif %}
+  </body>
+</html>
+
+{% endblock %}

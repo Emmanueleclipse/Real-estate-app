@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% load layout %}
+
+{% block endscripts %}{% javascripts "agents.js" %}{% endblock %}
+{% block extrahead %}{% css "agents.css" %}{% endblock %}
+
+{% block onready %}
+    agents.attach('#agents', 'all', {}); agents.attachfilter('#filter', '#agents'); agents.display();
+{% endblock %}
+
+{% block content %}
+
+{% searchbar "filter" %}
+{% panel "agents" %}
+
+{% endblock %}

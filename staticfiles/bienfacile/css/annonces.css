@@ -1,0 +1,85 @@
+
+/* Styling for overlay when loading */
+.loading-overlay {
+  display: table;
+  opacity: 0.7;
+}
+
+.loading-overlay-content {
+  text-transform: uppercase;
+  letter-spacing: 0.4em;
+  font-size: 1.15em;
+  font-weight: bold;
+  text-align: center;
+  display: table-cell;
+  vertical-align: middle;
+}
+
+.loading-overlay.loading-theme-light {
+  background-color: #fff;
+  color: #000;
+}
+
+.loading-overlay.loading-theme-dark {
+  background-color: #000;
+  color: #fff;
+}
+
+/* Custom */
+
+.classified {
+/*  display: none; */
+width: 300px;
+  margin: 0 6px 12px 6px;
+  background: #fff;
+  font: normal 13px/18px Arial, sans-serif;
+  color: #333;
+  padding: 10px 15px;
+  -webkit-box-shadow: 0 1px 2px rgba(0,0,0,0.5);
+  -moz-box-shadow: 0 1px 2px rgba(0,0,0,0.5);
+    box-shadow: 0 1px 2px rgba(0,0,0,0.5);
+    color: #FFF;
+    z-index: 2;
+}
+.classified img {
+    z-index: 1;
+    text-align: center; /* ensures the image is always in the h-middle */
+    width: 300;
+    height: 225;
+}
+
+
+
+.caption h2.left{
+    font-family: Helvetica, Verdana;
+    font-size: 1.6em;
+    color: #FFF;
+    z-index: 2;
+    line-height: 1;
+    width:64%; display:inline-table;
+    margin-top: -6px;
+}
+
+.caption h2.right{
+    font-family: Helvetica, Verdana;
+    font-size: 1.6em;
+    color: #FFF;
+    z-index: 2;
+    line-height: 1;
+    width:36%; display:inline-table;
+    text-align: right;
+    margin-top: -6px;
+}
+
+.caption {
+    background-color: #000;
+    position: absolute;
+    height: 50px;
+    width: 270px;
+    opacity: 0.65;
+    font-family: Verdana, Geneva, sans-serif;
+    color: #FFF;
+    bottom: 20px;
+    z-index: 1;
+    padding: 10px;
+}

@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% load layout %}
+
+{% block endscripts %}{% javascripts "clients.js" %}{% endblock %}
+{% block extrahead %}{% css "clients.css" %}{% endblock %}
+
+{% block onready %}
+    clientcontacts.attach('#clientcontacts', 'all', { } ); clientcontacts.display(); clientcontacts.attachfilter('#filter', '#clientcontacts'); clientcontacts.csrf = csrf;
+{% endblock %}
+
+{% block content %}
+
+{% searchbar "filter" %}
+{% panel "clientcontacts" %}
+
+{% endblock %}

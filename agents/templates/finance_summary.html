@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% load layout %}
+
+{% block endscripts %}{% javascripts "financesummary.js" %}{% endblock %}
+
+{% block onready %}
+    notairefactures.attach('#notaire', 'summary', {}); notairefactures.display();
+    suppliers_facture.attach('#expenses', 'summary', {}); suppliers_facture.display();
+{% endblock %}
+
+{% block content %}
+
+{% sectionrow %}{% sectionstart 0.5 %}
+
+<h4>Revenue des ventes</h4>
+{% panel "notaire" %}
+
+{% sectionnext 0.5 %}
+
+<h4>Depenses</h4>
+{% panel "expenses" %}
+
+{% sectionend %}{% sectionrowend %}
+
+{% endblock %}

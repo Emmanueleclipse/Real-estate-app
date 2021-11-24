@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% load layout %}
+
+{% block endscripts %}{% javascripts "index.js" %}{% endblock %}
+{% block extrahead %}{% css "home.css" %}{% endblock %}
+
+{% block onready %}
+    news.attach('#news', 'all', { }); news.display(); refresh(news, 5);
+    todo.attach('#todo', 'all', { 'filter' : { 'mine' : 1 } }); todo.display(); refresh(todo,30);
+    todo.attach('#tofollow', 'all', { 'filter' : { 'mine' : 0 } }); todo.display(); refresh(todo,30);
+    groupchat.attach('#chat-message', 'all', { max : 20 }); groupchat.display(); refresh(groupchat, 5);
+    groupchat.edit('#postgroupchat', { 'submit-inline': true });
+{% endblock %}
+
+{% block content %}
+
+{% sectionrow %}
+
+{% sectionstart 0.33 %}
+
+        <h4>A faire...<div class="btn-group pull-right"><a href="javascript:todo.modal('#modal', { 'title' : 'Nouveau tache' });"><button class="btn btn-default btn-sm" type="button" align="right"><i class="fa fa-plus"></i> Nouveau</button></a></div></h4>
+        {% panel "todo" %}
+
+        <h4>A suivre...</h4>
+        {% panel "tofollow" %}
+
+{% sectionnext 0.33 %}
+
+        {% paneltitle "Agence chat..." %}
+        {% panel "postgroupchat" %}
+        <div class="chat-inner">{% panel "chat-message" %}</div>
+
+{% sectionnext 0.33 %}
+
+        {% paneltitle "Activit&eacute;..." %}
+        {% panel "news" %}
+
+{% sectionend %}
+
+{% sectionrowend %}
+
+{% endblock %}
+
+

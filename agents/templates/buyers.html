@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% load layout %}
+
+{% block endscripts %}{% javascripts "buyers.js" %}{% endblock %}
+{% block extrahead %}{% css "buyers.css" %}{% endblock %}
+
+{% block onready %}
+    buyers.attach('#buyers', 'all', {}); buyers.attachfilter('#filter', '#buyers'); buyers.display();
+{% endblock %}
+
+{% block content %}
+
+{% searchbar "filter" %}
+{% panel "buyers" %}
+
+{% endblock %}

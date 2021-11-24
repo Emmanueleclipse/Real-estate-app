@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% load layout %}
+
+{% block extrahead %}{% css "chat.css" %}{% endblock %}
+
+{% block onready %}
+
+    clientid = getQueryStringValue('agent');
+    if (clientid)
+    {
+      chat.attach('#chat', 'single', { filter : {'thread' : clientid } } ); chat.display(); refresh(chat,2); chat.hidden['to_agent_id'] = clientid;
+      chat.edit('#postchat', { 'submit-inline': true });
+      unreadchat.updatesilent(null,{ agent_id : clientid });
+    }
+    else { chat.text('#postchat', "Pas de chat en cours"); chat.text('#chat', "Rechercher dans <a href='/agents/'>confreres</a>"); }
+    listchat.attach('#listchat', 'all', {}); listchat.display(); refresh(listchat,5);
+
+{% endblock %}
+
+{% block content %}
+            
+<br/><br/>
+{% sectionrow %}{% sectionstart 0.25 %}
+
+  {% paneltitle "Chats en cours..." %}
+  {% panel "listchat" %}
+
+{% sectionnext 0.75 %}
+
+  {% panel "postchat" %}
+  <hr/>
+  {% panel "chat" %}
+
+{% sectionend %}{% sectionrowend %}
+
+{% endblock %}
+
+{% block footer %}
+
+{% endblock %}

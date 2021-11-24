@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% load layout %}
+
+{% block endscripts %}
+<script src="https://transloadit.edgly.net/releases/uppy/v1.7.0/uppy.min.js"></script>
+{% javascripts "banks.js" %}{% endblock %}
+
+{% block extrahead %}
+<link href="https://transloadit.edgly.net/releases/uppy/v1.7.0/uppy.min.css" rel="stylesheet">
+{% endblock %}
+
+{% block onready %}
+    banks.attach('#banks', 'all', {}); banks.display();
+	bankentries.attach('#bankentries', 'all', {}); bankentries.attachfilter('#filter', '#bankentries'); bankentries.text('#bankentries', "Choisir banque");
+{% endblock %}
+
+{% block content %}
+
+<h4><div class="btn-group"><a href="javascript:banks.modal('#modal', { 'title' : 'Nouveau' });"><button class="btn btn-default btn-sm" type="button" align="right"><i class="fa fa-plus"></i> Nouveau</button></a></div></h4>
+{% panel "banks" %}
+
+<hr/>
+
+<h4><div id="bankname">Choisir compte banque</div></h4>
+
+{% searchbar "filter" %}
+
+<h4>
+	<div class="btn-group">&nbsp;
+		<a href="javascript:bankentries.modal('#modal', { 'title' : 'Nouveau', hidden: { bank_account_id: bankentries.current_account } });"><button class="btn btn-default btn-sm" type="button" align="right"><i class="fa fa-plus"></i> Operation</button></a>
+		<a href="javascript:bankentries.upload('#modal', { 'title' : 'Télécharge', hidden: { bank_account_id: bankentries.current_account } });"><button class="btn btn-default btn-sm" type="button" align="right"><i class="fa fa-plus"></i> Télécharge</button></a>
+	</div>
+</h4>
+
+{% panel "bankentries" %}
+
+{% endblock %}

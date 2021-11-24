@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% load layout %}
+
+{% block endscripts %}{% javascripts "agences.js" %}{% endblock %}
+{% block extrahead %}{% css "agences.css" %}{% endblock %}
+
+{% block onready %}
+     agences.attach('#agences', 'all', {});  agences.attachfilter('#filter', '#agences'); agences.display();
+{% endblock %}
+
+{% block content %}
+
+{% searchbar "filter" %}
+{% panel "agences" %}
+
+{% endblock %}

@@ -1,0 +1,120 @@
+{% extends "base.html" %}
+
+{% block extrahead %}
+    {% if settings.SERVER_ENVIRONMENT == 'LIVE' %}
+        <link href="http://agencystatic.bienfacile.com/annonces.css" rel="stylesheet">
+    {% elif settings.SERVER_ENVIRONMENT == 'STAGING' %}
+        <link href="/static/publish/annonces.css" rel="stylesheet">
+    {% else %}
+        <link href="/static/endless/css/slider.css" rel="stylesheet">
+        <link href="/static/bienfacile/css/annonces.css" rel="stylesheet">
+   {% endif %}
+
+<style type="text/css">
+
+.classified {
+width: 300px;
+	margin: 0 6px 12px 6px;
+	background: #fff;
+	font: normal 13px/18px Arial, sans-serif;
+	color: #333;
+	padding: 10px 15px;
+	-webkit-box-shadow: 0 1px 2px rgba(0,0,0,0.5);
+	-moz-box-shadow: 0 1px 2px rgba(0,0,0,0.5);
+    box-shadow: 0 1px 2px rgba(0,0,0,0.5);
+    color: #FFF;
+    z-index: 2;
+}
+.classified img {
+    z-index: 1;
+    text-align: center; /* ensures the image is always in the h-middle */
+    width: 300;
+    height: 225;
+}
+</style>
+{% endblock %}
+
+{% block endscripts %}
+    {% if settings.SERVER_ENVIRONMENT == 'LIVE' %}
+        <script type="text/javascript" src="http://agencystatic.bienfacile.com/classifieds.js"></script>
+    {% elif settings.SERVER_ENVIRONMENT == 'STAGING' %}
+		<script type="text/javascript" src="/static/publish/classifieds.js"></script>
+    {% else %}
+		<script type="text/javascript" src="/static/endless/js/modernizr.min.js"></script>
+		<script type="text/javascript" src="/static/endless/js/bootstrap-slider.min.js"></script>
+		<script type="text/javascript" src="/static/bienfacile/js/classifieds.js"></script>
+    {% endif %}
+{% endblock %}
+
+{% block onready %}
+annonces.attach('#annonces', 'all', {}); annonces.display();
+
+function pricerange(prices, min, max)
+{
+	if (prices[0]<=min && prices[1]>=max) return "tous";
+	if (prices[0]>min && prices[1]>=max) return Number(prices[0]).toLocaleString('en')+'+';
+	if (prices[0]<=min && prices[1]<max) return "< "+Number(prices[1]).toLocaleString('en');
+}
+$("#priceslider").slider({});
+$('#priceslider').slider().on('slide', function(ev){ $("#pricerange").val(pricerange(ev.value,50000,1000000)); }).on('slideStop', function(ev){ annonces.setrange('#annonces', 'price', ev.value[0]>50000?ev.value[0]:false, ev.value[1]<1000000?ev.value[1]:false); });
+
+$("#pricepersqmslider").slider({});
+$('#pricepersqmslider').slider().on('slide', function(ev){ $("#pricepersqmrange").val(pricerange(ev.value,1000,10000)); }).on('slideStop', function(ev){ annonces.setrange('#annonces', 'pricepersqm', ev.value[0]>1000?ev.value[0]:false, ev.value[1]<10000?ev.value[1]:false); });
+
+{% endblock %}
+
+{% block content %}
+<div class="panel panel-default">
+<form>
+<div class="panel-body">
+	<div class="form-group">
+		<div class="btn-group" align="middle">
+			<button type="button" class="btn btn-default areabutton" area="69224" onclick="$(this).toggleClass('btn-default btn-success');annonces.togglefilter('#annonces', 'location', 'Carre d\'Or');">Carre d'Or</button>
+			<button type="button" class="btn btn-default areabutton" area="69225" onclick="$(this).toggleClass('btn-default btn-success');annonces.togglefilter('#annonces', 'location', 'Quartier Musiciens');">Musicians</button>
+			<button type="button" class="btn btn-default areabutton" area="69230,69255" onclick="$(this).toggleClass('btn-default btn-success');annonces.togglefilter('#annonces', 'location', ['Quartier Fleurs','Tzarwitch']);">Fleurs</button>
+			<button type="button" class="btn btn-default areabutton" area="69226" onclick="$(this).toggleClass('btn-default btn-success');annonces.togglefilter('#annonces', 'location', 'Vieux Nice');">Vieux Nice</button>
+			<button type="button" class="btn btn-default areabutton" area="69227" onclick="$(this).toggleClass('btn-default btn-success');annonces.togglefilter('#annonces', 'location', 'Promenade des Anglais');">Promenade</button>
+			<button type="button" class="btn btn-default areabutton" area="69228,69232" onclick="$(this).toggleClass('btn-default btn-success');annonces.togglefilter('#annonces', 'location', ['Port','Mont Boron']);">Port / Mont Boron</button>
+			<button type="button" class="btn btn-default areabutton" area="69229,69244" onclick="$(this).toggleClass('btn-default btn-success');annonces.togglefilter('#annonces', 'location', 'Carre d\'Argent','Jean Medecin');">Centre Ville</button>
+			<button type="button" class="btn btn-default areabutton" area="69231" onclick="$(this).toggleClass('btn-default btn-success');annonces.togglefilter('#annonces', 'location', 'Cimiez');">Cimiez</button>
+			<button type="button" class="btn btn-default areabutton" area="69234" onclick="$(this).toggleClass('btn-default btn-success');annonces.togglefilter('#annonces', 'location', ['Nice Ouest','Fabron']);">Nice Ouest</button>
+			<button type="button" class="btn btn-default areabutton" area="69233" onclick="$(this).toggleClass('btn-default btn-success');annonces.togglefilter('#annonces', 'location', ['Nice Nord','Libération']);">Nice Nord</button>
+			<button type="button" class="btn btn-default areabutton" area="69235,69246" onclick="$(this).toggleClass('btn-default btn-success');annonces.togglefilter('#annonces', 'location', ['Nice Est','Mont Alban']);">Nice Est</button>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-lg-4">
+			<div class="form-group inline">
+				<div class="btn-group">
+					<button type="button" class="btn btn-default" id="sortbydate" onClick="annonces.sortby('#annonces', 'date')">Date</button>
+					<button type="button" class="btn btn-default" id="sortbyprice" onClick="annonces.sortby('#annonces', 'price')">Prix</button>
+					<button type="button" class="btn btn-default" id="sortbypricepersqm" onClick="annonces.sortby('#annonces', 'pricepersqm')">Prix/m&sup2;</button>
+					<button type="button" class="btn btn-default" id="sortbypricedrop" onClick="annonces.sortby('#annonces', 'pricedrop')">Baisse</button>
+				</div>
+			</div>
+		</div>
+		<div class="col-lg-4">
+			<div class="input-group">
+				<span class="input-group-addon">Prix &euro;</span>
+				<input type="text" name="pricerange" id="pricerange" value="" class="form-control" placeholder="tous" style="width: 120px;" readonly="readonly">
+			</div><!-- /input-group -->
+				<input type="text" value="" data-slider-min="50000" data-slider-max="1000000" data-slider-step="5000" id="priceslider" placeholder="tous" data-slider-tooltip="hide" data-slider-value="[0,1000000]">
+		</div>
+		<div class="col-lg-4">
+			<div class="input-group">
+				<span class="input-group-addon">Prix/m&sup2; &euro;</span>
+				<input type="text" name="pricepersqmrange" id="pricepersqmrange" class="form-control" placeholder="tous" style="width: 120px;" readonly="readonly">
+			</div><!-- /input-group -->
+				<input type="text" value="" data-slider-min="1000" data-slider-max="10000" data-slider-step="100" id="pricepersqmslider" placeholder="tous" data-slider-tooltip="hide" data-slider-value="[0,10000]">
+		</div>
+	</div>
+	<!--
+	<div class="panel-footer">
+		<button type="submit" class="btn btn-default">Submit</button>
+	</div>
+	-->
+</form>
+</div>
+
+<div id="annonces">Loading...</div>
+{% endblock %}

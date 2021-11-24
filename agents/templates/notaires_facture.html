@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% load layout %}
+
+{% block endscripts %}{% javascripts "notairefactures.js" %}{% endblock %}
+
+{% block onready %}
+    notairefactures.attach('#notairefactures', 'all', {}); notairefactures.attachfilter('#filter', '#notairefactures'); notairefactures.display();
+{% endblock %}
+
+{% block content %}
+
+{% searchbar "filter" %}
+
+<h4>
+	<div class="btn-group">&nbsp;
+		<a href="javascript:notairefactures.modal('#modal', { 'title' : 'Nouveau facture' });"><button class="btn btn-default btn-sm" type="button" align="right"><i class="fa fa-plus"></i> Nouveau</button></a>
+	</div>
+</h4>
+
+{% panel "notairefactures" %}
+
+{% endblock %}
